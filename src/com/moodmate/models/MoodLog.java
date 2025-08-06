@@ -8,10 +8,10 @@ public class MoodLog implements Serializable {
     private String mood;
     private String notes;
 
-    MoodLog(LocalDate d, String m, String n) {
-        date=d;
-        mood=m;
-        notes=n;
+    public MoodLog(LocalDate date, String mood, String notes) {
+        this.date = date;
+        this.mood = mood;
+        this.notes = notes;
     }
 
     public LocalDate getDate() {
