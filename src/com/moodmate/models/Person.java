@@ -1,10 +1,16 @@
 package com.moodmate.models;
 
-abstract class Person {
+import java.io.Serializable;
+
+abstract class Person implements Serializable {
     protected int id;
     protected String name;
     protected String email;
     protected String password;
+
+    protected Person() {
+        // Required for deserialization of subclasses
+    }
 
     public Person(int id, String name, String email, String password) {
         this.id = id;
