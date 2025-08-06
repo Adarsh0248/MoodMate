@@ -1,14 +1,18 @@
 package com.moodmate.models;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class User extends Person {
+public class User extends Person implements Serializable {
     private List<Habit> habits;
     private List<MoodLog> moodLogs;
     public User(int id, String name, String email, String password){
         super(id,name,email,password);
         habits = new ArrayList<>();
         moodLogs = new ArrayList<>();
+    }
+    public User() {
+        // This no-argument constructor is required for deserialization
     }
 
     @Override
