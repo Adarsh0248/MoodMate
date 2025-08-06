@@ -4,7 +4,7 @@ public class Admin extends Person {
     public Admin(int id, String name, String email, String password) {
         super(id, name, email, password);
     }
-    @Deprecated
+    @Override
     public void displayMenu(){
         System.out.println("1.View System Statistics");
         System.out.println("2.Add new Quote");
