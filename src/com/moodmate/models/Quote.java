@@ -7,9 +7,9 @@ public class Quote implements Serializable {
     private String text;
     private String category;
 
-    Quote(String t, String c) {
-        text = t;
-        category = c;
+    public Quote(String text, String category) {
+        this.text = text;
+        this.category = category;
     }
 
     public String getText() {
