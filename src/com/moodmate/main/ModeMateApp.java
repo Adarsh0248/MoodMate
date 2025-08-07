@@ -1,9 +1,11 @@
 package com.moodmate.main;
 
+import com.moodmate.data.DataManager;
 import com.moodmate.models.Habit;
 import com.moodmate.models.MoodLog;
 import com.moodmate.models.User;
 
+import javax.xml.crypto.Data;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +14,7 @@ import java.util.logging.SocketHandler;
 
 public class ModeMateApp {
     public static Scanner scanner = new Scanner(System.in);
-    public static List<User> users = new ArrayList<>();
+    public static List<User> users = DataManager.loadUsers();
     public static User currentUser = null;
     private static void login(){
         User foundUser = null;
@@ -160,7 +162,9 @@ public class ModeMateApp {
                 switch (choice) {
                     case 1: login(); break;
                     case 2: register(); break;
-                    case 3: System.exit(0); break;
+                    case 3:
+                        DataManager.saveUsers(users);
+                        System.exit(0); break;
                     default:
                         System.out.println("Wrong choice");
                 }

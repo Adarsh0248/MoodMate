@@ -1,7 +1,11 @@
 package com.moodmate.models;
+import com.moodmate.core.QuoteManager;
+
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class User extends Person implements Serializable {
     private List<Habit> habits;
@@ -27,6 +31,12 @@ public class User extends Person implements Serializable {
     }
     public void logMood(MoodLog moodLog){
         moodLogs.add(moodLog);
+
+        QuoteManager qm = new QuoteManager();
+        qm.loadQuotesFromFile();
+        Quote dailyQuote = qm.getRandomQuote(moodLog.getMood());
+        System.out.println("\nHere's a quote for you:");
+        System.out.println("\"" + dailyQuote.getText() + "\" - " + dailyQuote.getCategory());
     }
 
     public List<MoodLog> getMoodLogs() {
@@ -36,4 +46,5 @@ public class User extends Person implements Serializable {
     public List<Habit> getHabits() {
         return habits;
     }
+
 }
