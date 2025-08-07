@@ -53,7 +53,7 @@ public class ModeMateApp {
             }
             if(passwordExists){
                 currentUser = foundUser;
-                System.out.println("You have successfully logged in 😊");
+                System.out.println(currentUser.getName()+", You have successfully logged in 😊");
             }else{
                 System.out.println("Out of Attempts");
                 System.out.println("Please try again");
@@ -87,7 +87,7 @@ public class ModeMateApp {
         String name = scanner.nextLine();
         User user = new User(users.size(), name, email, password);
         users.add(user);
-        System.out.println("Register successful ✅");
+        System.out.println("Registration successful ✅");
         System.out.println("Welcome to MoodMate " + user.getName());
     }
     private static void addHabit(){
@@ -123,7 +123,7 @@ public class ModeMateApp {
             if (currentUser.getHabits().isEmpty()) {
                 System.out.println("You haven't added any habits yet. Go add one!");
             }else {
-                System.out.println("---Your Habits");
+                System.out.println("---Your Habits---");
                 int noOfHabits = currentUser.getHabits().size();
                 int n = 1;
                 for (Habit habit : currentUser.getHabits()) {
