@@ -21,7 +21,7 @@ public class QuoteManager {
         try( BufferedReader br= new BufferedReader(new FileReader("quotes.csv"))){
             String line;
             while((line=br.readLine())!=null){
-                String[] parts = line.split(",");
+                String[] parts = line.split(":");
                 if(parts.length==2){
                     String text= parts[0];
                     String category= parts[1];

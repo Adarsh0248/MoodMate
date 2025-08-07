@@ -14,7 +14,7 @@ import java.util.logging.SocketHandler;
 
 public class ModeMateApp {
     public static Scanner scanner = new Scanner(System.in);
-    public static List<User> users = DataManager.loadUsers();
+    public static List<User> users;
     public static User currentUser = null;
     private static void login(){
         User foundUser = null;
@@ -41,8 +41,8 @@ public class ModeMateApp {
                 password = scanner.nextLine();
                 if(!password.equals(foundUser.getPassword())){
                     System.out.println("❌ Wrong password, Please try again");
-                    System.out.println("Number of attempts remaining is " + noOfAttempts);
-                    noOfAttempts--;
+                    System.out.println("Number of attempts remaining is " + --noOfAttempts);
+
                 }else{
 
                     passwordExists = true;
@@ -148,6 +148,7 @@ public class ModeMateApp {
         }
     };
     public static void main(String[] args) {
+        users = DataManager.loadUsers();
         while (true) {
             if(currentUser == null) {
                 //---Logged Out Stage---
