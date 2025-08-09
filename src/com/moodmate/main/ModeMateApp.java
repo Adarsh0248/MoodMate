@@ -4,11 +4,7 @@ package com.moodmate.main;
 import com.moodmate.core.MoodAnalyzer;
 import com.moodmate.core.QuoteManager;
 import com.moodmate.data.DataManager;
-import com.moodmate.models.Habit;
-import com.moodmate.models.MoodLog;
-import com.moodmate.models.Quote;
-import com.moodmate.models.User;
-
+import com.moodmate.models.*;
 
 
 import javax.xml.crypto.Data;
@@ -21,19 +17,19 @@ import java.util.Scanner;
 
 public class ModeMateApp {
     public static Scanner scanner ;
-    public static List<User> users;
+    public static List<Person> users;
     private static QuoteManager quoteManager;
 
-    public static User currentUser = null;
+    public static Person currentUser = null;
     private static void login(){
-        User foundUser = null;
+        Person foundUser = null;
         String email = null;
         System.out.println("Please enter your email: ");
         email = scanner.nextLine();
 
-            for(User user : users){
+            for(Person user : users){
                 if(user.getEmail().equals(email)){
-                    foundUser = user;
+                    foundUser = (User) user;
 
                     break;
                 }
@@ -77,7 +73,7 @@ public class ModeMateApp {
             email = scanner.nextLine();
 
             boolean emailExists = false;
-            for (User user : users) {
+            for (Person user : users) {
                 if (user.getEmail().equalsIgnoreCase(email)) {
                     emailExists = true;
                     break;
@@ -99,21 +95,21 @@ public class ModeMateApp {
         System.out.println("Registration successful ✅");
         System.out.println("Welcome to MoodMate " + user.getName());
     }
-    private static void addHabit(){
-        if(currentUser==null){
+    private static void addHabit(User user){
+        if(user==null){
             System.out.println("Please Login first");
         }else{
             System.out.println("Enter new habit name: ");
             String newHabit = scanner.nextLine();
             Habit habit = new Habit(newHabit);
-            currentUser.addHabit(habit);
+            user.addHabit(habit);
             habit.markCompleted();
             System.out.println("Habit successfully added ✅");
             System.out.println("Great! A new journey begins today. Let's start tracking '" + newHabit+" .");
         }
     }
-    private static void markHabitComplete() {
-        if (currentUser == null) {
+    private static void markHabitComplete(User user) {
+        if (user == null) {
             System.out.println("Please login first.");
             return;
         }
@@ -121,7 +117,7 @@ public class ModeMateApp {
         System.out.println("Which habit would you like to complete?");
         habitName = scanner.nextLine();
         Habit habitToMark = null;
-        for(Habit habit : currentUser.getHabits()){
+        for(Habit habit : user.getHabits()){
             if(Objects.equals(habit.getHabitName(), habitName)){
                 habitToMark = habit;
             }
@@ -135,7 +131,7 @@ public class ModeMateApp {
             scanner.nextLine();
             if(choice==1){
                 habitToMark= new Habit(habitName);
-                currentUser.addHabit(habitToMark);
+                user.addHabit(habitToMark);
 
             }else{
                 return;
@@ -163,15 +159,15 @@ public class ModeMateApp {
         }
 
     }
-    private static void logMood(){
-        if(currentUser==null){
+    private static void logMood(User user){
+        if(user==null){
             System.out.println("Please Login first");
         } else {
             System.out.println("Please enter your mood: ");
             String mood = scanner.nextLine();
             System.out.println("Please enter any note : ");
             String note = scanner.nextLine();
-            currentUser.logMood(new MoodLog(mood, note));
+            user.logMood(new MoodLog(mood, note));
             System.out.println("Mood Logged Successfully 😊");
 
             //suggestion
@@ -184,31 +180,32 @@ public class ModeMateApp {
         }
     }
     private static void logOut(){
+
         currentUser = null;
     }
-    private static void viewProgress(){
-        if(currentUser==null){
+    private static void viewProgress(User user){
+        if(user==null){
             System.out.println("Please Login first");
         }else{
-            if (currentUser.getHabits().isEmpty()) {
+            if (user.getHabits().isEmpty()) {
                 System.out.println("You haven't added any habits yet. Go add one!");
             }else {
                 System.out.println("---Your Habits---");
                 int n = 1;
-                for (Habit habit : currentUser.getHabits()) {
+                for (Habit habit : user.getHabits()) {
                     System.out.println((n++) + ". Habit Name: " + habit.getHabitName());
                     System.out.println("Current Streak : " + habit.getStreak() + " Days");
                     System.out.println("No. of Days Completed : " + habit.getDaysCompleted());
                 }
             }
-            if (currentUser.getMoodLogs().isEmpty()) {
+            if (user.getMoodLogs().isEmpty()) {
                 System.out.println("You haven't logged any moods yet.");
             }else {
 
                 System.out.println("---Your Recent Moods ---");
-                int noOfMoods = currentUser.getMoodLogs().size();
+                int noOfMoods = user.getMoodLogs().size();
                 for (int i = noOfMoods - 1; i >= 0; i--) {
-                    MoodLog moodLog = currentUser.getMoodLogs().get(i);
+                    MoodLog moodLog = user.getMoodLogs().get(i);
                     System.out.println("Date: " + moodLog.getDate());
                     System.out.println("Mood: " + moodLog.getMood());
                     System.out.println("Note: " + moodLog.getNotes());
@@ -243,24 +240,126 @@ public class ModeMateApp {
                 }
 
 
-            }else{
-                //---Logged In Stage---
-                currentUser.displayMenu();
-                int choice = scanner.nextInt();
-                scanner.nextLine();
-                switch (choice) {
-                    case 1: addHabit(); break;
-                    case 2: logMood();break;
-                    case 3: viewProgress(); break;
-                    case 4: markHabitComplete(); break;
-                    case 5: logOut(); break;
-                    default:
-                        System.out.println("Wrong choice");
-                }
+            }else {
+                if (currentUser instanceof Admin) {
+                    //---Admin Menu---
+                    Admin admin = (Admin) currentUser;
+                    admin.displayMenu();
+                    int choice = scanner.nextInt();
+                    scanner.nextLine();
+                    switch (choice) {
+                        case 1: viewSystemStats(); break;
+                        case 2: addNewQuote(); break;
+                        case 3: viewAllUsers(); break;
+                        case 4:makeAdmin(); break;
+                        case 5 :
+                            admin = null;
+                            logOut(); break;
+                            default:
+                                System.out.println("Wrong choice");
+                    }
 
+
+                } else {
+                    //---Logged In Stage---
+                   User user = (User) currentUser;
+                    user.displayMenu();
+                    int choice = scanner.nextInt();
+                    scanner.nextLine();
+                    switch (choice) {
+                        case 1:
+                            addHabit(user);
+                            break;
+                        case 2:
+                            logMood(user);
+                            break;
+                        case 3:
+                            viewProgress(user);
+                            break;
+                        case 4:
+                            markHabitComplete(user);
+                            break;
+                        case 5:
+                            logOut();
+                            break;
+                        default:
+                            System.out.println("Wrong choice");
+                    }
+
+                }
             }
 
 
+        }
+    }
+
+    private static void addNewQuote() {
+        System.out.println("Please enter the text of the new quote: ");
+        String text = scanner.nextLine();
+        System.out.println("Please enter the category of the new quote: ");
+        String category = scanner.nextLine();
+        Quote quote = new Quote(text, category);
+        quoteManager.addQuote(quote);
+
+        try (java.io.FileWriter fw = new java.io.FileWriter("quotes.csv", true);
+             java.io.BufferedWriter bw = new java.io.BufferedWriter(fw);
+             java.io.PrintWriter out = new java.io.PrintWriter(bw)) {
+
+            // Format the line exactly as it is in your file
+            out.println("\"" + text + "\":" + category);
+
+            System.out.println("✅ New quote added successfully!");
+
+        } catch (java.io.IOException e) {
+            System.err.println("❌ Error: Could not save the new quote to the file.");
+            // Optional: Remove the quote from the in-memory list if saving failed
+            quoteManager.removeQuote(quote);
+        }
+
+    }
+
+    private static void viewSystemStats() {
+        int totalUsers = 0;
+        int totalAdmins = 0;
+        int totalHabits = 0;
+        int totalMoodLogs = 0;
+
+        for (Person person : users) {
+            if (person instanceof Admin) {
+                totalAdmins++;
+            } else {
+                totalUsers++;
+                User user = (User) person;
+                totalHabits += user.getHabits().size();
+                totalMoodLogs += user.getMoodLogs().size();
+            }
+        }
+
+        System.out.println("\n--- MoodMate System Statistics ---");
+        System.out.println("Total Registered Users: " + totalUsers);
+        System.out.println("Total Administrators: " + totalAdmins);
+        System.out.println("------------------------------------");
+        System.out.println("Total Habits Tracked: " + totalHabits);
+        System.out.println("Total Moods Logged: " + totalMoodLogs);
+    }
+
+    private static void viewAllUsers() {
+        if(currentUser==null){
+            System.out.println("Please Login first");
+            return;
+        }
+        if (currentUser instanceof User) {
+            System.out.println("Not Accessible to Users.");
+            return;
+        }
+        for(Person person : users){
+            String role = (person instanceof Admin) ? "Admin" : "User";
+            System.out.println(
+                    "ID: " + person.getId() +
+                            " | Name: " + person.getName() +
+                            " | Email: " + person.getEmail() +
+                            " | Role: " + role
+            );
         }
     }
 

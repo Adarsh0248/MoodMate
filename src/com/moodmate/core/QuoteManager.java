@@ -48,4 +48,14 @@ public class QuoteManager {
             return quotesByMood.get(randomIndex);
         }
     }
+
+    public void addQuote(Quote quote) {
+        quotes.add(quote);
+
+
+    }
+
+    public void removeQuote(Quote quote) {
+        quotes.remove(quote);
+    }
 }
