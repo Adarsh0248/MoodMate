@@ -1,11 +1,14 @@
 package com.moodmate.main;
 
+import com.moodmate.core.MoodAnal
 import com.moodmate.core.QuoteManager;
 import com.moodmate.data.DataManager;
 import com.moodmate.models.Habit;
 import com.moodmate.models.MoodLog;
 import com.moodmate.models.Quote;
 import com.moodmate.models.User;
+
+
 
 import javax.xml.crypto.Data;
 import java.sql.SQLOutput;
@@ -14,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
-import java.util.logging.SocketHandler;
 
 public class ModeMateApp {
     public static Scanner scanner ;
@@ -66,7 +68,7 @@ public class ModeMateApp {
             }
 
 
-    };
+    }
     private static void register(){
         String email;
         while (true) {
@@ -169,15 +171,20 @@ public class ModeMateApp {
             System.out.println("Please enter any note : ");
             String note = scanner.nextLine();
             currentUser.logMood(new MoodLog(mood, note));
+            System.out.println("Mood Logged Successfully 😊");
+
+            //suggestion
+            MoodAnalyzer moodAnalyzer = new MoodAnalyzer();
+            System.out.println(moodAnalyzer.analyzeMood(note));
             System.out.println("Mood Logged Succesfully 😊");
             Quote dailyQuote = quoteManager.getRandomQuote(mood);
             System.out.println("\nHere's a quote for you:");
             System.out.println("\n" + dailyQuote.getText() + " - " + dailyQuote.getCategory());
         }
-    };
+    }
     private static void logOut(){
         currentUser = null;
-    };
+    }
     private static void viewProgress(){
         if(currentUser==null){
             System.out.println("Please Login first");
@@ -186,7 +193,6 @@ public class ModeMateApp {
                 System.out.println("You haven't added any habits yet. Go add one!");
             }else {
                 System.out.println("---Your Habits---");
-                int noOfHabits = currentUser.getHabits().size();
                 int n = 1;
                 for (Habit habit : currentUser.getHabits()) {
                     System.out.println((n++) + ". Habit Name: " + habit.getHabitName());
@@ -208,7 +214,7 @@ public class ModeMateApp {
                 }
             }
         }
-    };
+    }
     public static void main(String[] args) {
         scanner = new Scanner(System.in);
         users = DataManager.loadUsers();
