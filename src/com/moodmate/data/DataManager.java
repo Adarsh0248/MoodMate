@@ -22,24 +22,25 @@ public class DataManager{
     }
 
     public static List<Person> loadUsers() {
+        List<Person> users;
         try(ObjectInputStream ois = new ObjectInputStream(new FileInputStream(FILE_PATH))){
-            List<Person> users=(List<Person>) ois.readObject();
-            if(users==null){
-                Admin defaultAdmin1 = new Admin(1,"Aman","aman@gmail.com","Aman@123");
-                Admin defaultAdmin2 = new Admin(2,"Adarsh","adarsh@gmail.com","Adarsh@123");
+            users=(List<Person>) ois.readObject();
+        }
+        catch( EOFException E){
+                Admin defaultAdmin1 = new Admin("Aman","aman@gmail.com","Aman@123");
+                Admin defaultAdmin2 = new Admin("Adarsh","adarsh@gmail.com","Adarsh@123");
                 users= new ArrayList<>();
                 users.add(defaultAdmin1);
                 users.add(defaultAdmin2);
-            }
-            return users;
         }
         catch (FileNotFoundException e){
             System.out.println("No existing user data found. Starting fresh.");
             return new ArrayList<>();
         }
         catch(IOException | ClassNotFoundException e){
-            System.err.println("Error loading user data: " + e.getMessage());
+            System.err.println("Error loading user data: " + e);
             return new ArrayList<>();
         }
+        return users;
     }
 }

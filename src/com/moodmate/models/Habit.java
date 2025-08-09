@@ -1,8 +1,9 @@
 package com.moodmate.models;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class Habit {
+public class Habit implements Serializable {
     private String habitName;
     private LocalDate startDate;
     private int daysCompleted;
