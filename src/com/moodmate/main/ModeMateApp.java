@@ -1,5 +1,6 @@
 package com.moodmate.main;
 
+import com.moodmate.core.MoodAnalyzer;
 import com.moodmate.data.DataManager;
 import com.moodmate.models.Habit;
 import com.moodmate.models.MoodLog;
@@ -111,6 +112,10 @@ public class ModeMateApp {
             String note = scanner.nextLine();
             currentUser.logMood(new MoodLog(mood, note));
             System.out.println("Mood Logged Succesfully 😊");
+
+            //suggestion
+            MoodAnalyzer moodAnalyzer = new MoodAnalyzer();
+            System.out.println(moodAnalyzer.analyzeMood(note));
         }
     };
     private static void logOut(){
