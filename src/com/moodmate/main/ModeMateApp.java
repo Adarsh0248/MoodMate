@@ -1,6 +1,6 @@
 package com.moodmate.main;
 
-import com.moodmate.core.MoodAnal
+import com.moodmate.core.MoodAnalyzer;
 import com.moodmate.core.QuoteManager;
 import com.moodmate.data.DataManager;
 import com.moodmate.models.Habit;
@@ -8,12 +8,6 @@ import com.moodmate.models.MoodLog;
 import com.moodmate.models.Quote;
 import com.moodmate.models.User;
 
-
-
-import javax.xml.crypto.Data;
-import java.sql.SQLOutput;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
