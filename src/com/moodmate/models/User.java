@@ -24,19 +24,14 @@ public class User extends Person implements Serializable {
         System.out.println("1.Add a new Habit");
         System.out.println("2.Log today's Mood");
         System.out.println("3.View my Progress");
-        System.out.println("4.LogOut");
+        System.out.println("4.Mark Habit as Completed");
+        System.out.println("5.LogOut");
     }
     public void addHabit(Habit habit){
         habits.add(habit);
     }
     public void logMood(MoodLog moodLog){
         moodLogs.add(moodLog);
-
-        QuoteManager qm = new QuoteManager();
-        qm.loadQuotesFromFile();
-        Quote dailyQuote = qm.getRandomQuote(moodLog.getMood());
-        System.out.println("\nHere's a quote for you:");
-        System.out.println("\n" + dailyQuote.getText() + " - " + dailyQuote.getCategory());
     }
 
     public List<MoodLog> getMoodLogs() {
