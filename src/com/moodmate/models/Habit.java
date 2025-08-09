@@ -16,7 +16,7 @@ public class Habit {
         streak = 0;
         lastCompletionDate = null;
     }
-    public void markCompleted() {
+    public int markCompleted() {
         LocalDate today = LocalDate.now();
         if(lastCompletionDate==null) {
             lastCompletionDate = today;
@@ -24,7 +24,7 @@ public class Habit {
 
         }
         else if(lastCompletionDate.equals(today)){
-            return;
+            return streak;
         }
         else if(lastCompletionDate.equals(today.minusDays(1))) {
             streak+=1;
@@ -35,6 +35,8 @@ public class Habit {
             lastCompletionDate = today;
         }
         daysCompleted++;
+        return streak;
+
     }
 
     public LocalDate getLastCompletionDate() {
