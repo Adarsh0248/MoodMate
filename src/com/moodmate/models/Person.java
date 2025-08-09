@@ -2,7 +2,7 @@ package com.moodmate.models;
 
 import java.io.Serializable;
 
-abstract class Person implements Serializable {
+public abstract class Person implements Serializable {
     protected int id;
     protected String name;
     protected String email;

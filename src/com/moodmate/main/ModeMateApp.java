@@ -257,10 +257,7 @@ public class ModeMateApp {
                     default:
                         System.out.println("Wrong choice");
                 }
-
             }
-
-
         }
     }
 
