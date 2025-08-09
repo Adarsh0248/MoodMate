@@ -1,20 +1,29 @@
 package com.moodmate.main;
 
+
+import com.moodmate.core.MoodAnalyzer;
+import com.moodmate.core.QuoteManager;
 import com.moodmate.data.DataManager;
 import com.moodmate.models.Habit;
 import com.moodmate.models.MoodLog;
+import com.moodmate.models.Quote;
 import com.moodmate.models.User;
 
+
+
 import javax.xml.crypto.Data;
+import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
-import java.util.logging.SocketHandler;
 
 public class ModeMateApp {
-    public static Scanner scanner = new Scanner(System.in);
+    public static Scanner scanner ;
     public static List<User> users;
+    private static QuoteManager quoteManager;
+
     public static User currentUser = null;
     private static void login(){
         User foundUser = null;
@@ -60,7 +69,7 @@ public class ModeMateApp {
             }
 
 
-    };
+    }
     private static void register(){
         String email;
         while (true) {
@@ -96,10 +105,63 @@ public class ModeMateApp {
         }else{
             System.out.println("Enter new habit name: ");
             String newHabit = scanner.nextLine();
-            currentUser.addHabit(new Habit(newHabit));
+            Habit habit = new Habit(newHabit);
+            currentUser.addHabit(habit);
+            habit.markCompleted();
             System.out.println("Habit successfully added ✅");
-
+            System.out.println("Great! A new journey begins today. Let's start tracking '" + newHabit+" .");
         }
+    }
+    private static void markHabitComplete() {
+        if (currentUser == null) {
+            System.out.println("Please login first.");
+            return;
+        }
+        String habitName = null;
+        System.out.println("Which habit would you like to complete?");
+        habitName = scanner.nextLine();
+        Habit habitToMark = null;
+        for(Habit habit : currentUser.getHabits()){
+            if(Objects.equals(habit.getHabitName(), habitName)){
+                habitToMark = habit;
+            }
+        }
+        if(habitToMark==null){
+            System.out.println("Habit not found");
+            System.out.println("Would You like to add this habit to your Habits ?");
+            System.out.println("1.Yes");
+            System.out.println("2.No");
+            int choice  = scanner.nextInt();
+            scanner.nextLine();
+            if(choice==1){
+                habitToMark= new Habit(habitName);
+                currentUser.addHabit(habitToMark);
+
+            }else{
+                return;
+            }
+        }
+        int newStreak = habitToMark.markCompleted();
+        System.out.println("✅ Habit '" + habitToMark.getHabitName() + "' marked as complete!");
+
+        switch (newStreak) {
+            case 1:
+                System.out.println("Great! A new journey begins today.");
+                break;
+            case 3:
+                System.out.println("🔥 You're on a 3-day roll! The momentum is building. Keep it up!");
+                break;
+            case 7:
+                System.out.println("🎉 An entire week of consistency! Amazing work!");
+                break;
+            case 14:
+                System.out.println("🚀 Two weeks straight! This is becoming a real habit.");
+                break;
+            case 30:
+                System.out.println("🏆 Incredible! You've stuck with it for a whole month!");
+                break;
+        }
+
     }
     private static void logMood(){
         if(currentUser==null){
@@ -110,12 +172,20 @@ public class ModeMateApp {
             System.out.println("Please enter any note : ");
             String note = scanner.nextLine();
             currentUser.logMood(new MoodLog(mood, note));
+            System.out.println("Mood Logged Successfully 😊");
+
+            //suggestion
+            MoodAnalyzer moodAnalyzer = new MoodAnalyzer();
+            System.out.println(moodAnalyzer.analyzeMood(note));
             System.out.println("Mood Logged Succesfully 😊");
+            Quote dailyQuote = quoteManager.getRandomQuote(mood);
+            System.out.println("\nHere's a quote for you:");
+            System.out.println("\n" + dailyQuote.getText() + " - " + dailyQuote.getCategory());
         }
-    };
+    }
     private static void logOut(){
         currentUser = null;
-    };
+    }
     private static void viewProgress(){
         if(currentUser==null){
             System.out.println("Please Login first");
@@ -124,7 +194,6 @@ public class ModeMateApp {
                 System.out.println("You haven't added any habits yet. Go add one!");
             }else {
                 System.out.println("---Your Habits---");
-                int noOfHabits = currentUser.getHabits().size();
                 int n = 1;
                 for (Habit habit : currentUser.getHabits()) {
                     System.out.println((n++) + ". Habit Name: " + habit.getHabitName());
@@ -146,9 +215,12 @@ public class ModeMateApp {
                 }
             }
         }
-    };
+    }
     public static void main(String[] args) {
+        scanner = new Scanner(System.in);
         users = DataManager.loadUsers();
+        quoteManager= new QuoteManager();
+        quoteManager.loadQuotesFromFile();
         while (true) {
             if(currentUser == null) {
                 //---Logged Out Stage---
@@ -178,9 +250,10 @@ public class ModeMateApp {
                 scanner.nextLine();
                 switch (choice) {
                     case 1: addHabit(); break;
-                    case 2: logMood(); break;
+                    case 2: logMood();break;
                     case 3: viewProgress(); break;
-                    case 4: logOut(); break;
+                    case 4: markHabitComplete(); break;
+                    case 5: logOut(); break;
                     default:
                         System.out.println("Wrong choice");
                 }
@@ -190,4 +263,6 @@ public class ModeMateApp {
 
         }
     }
+
+
 }
