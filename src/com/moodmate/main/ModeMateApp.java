@@ -6,11 +6,6 @@ import com.moodmate.core.QuoteManager;
 import com.moodmate.data.DataManager;
 import com.moodmate.models.*;
 
-
-import javax.xml.crypto.Data;
-import java.sql.SQLOutput;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
@@ -29,8 +24,7 @@ public class ModeMateApp {
 
             for(Person user : users){
                 if(user.getEmail().equals(email)){
-                    foundUser = (User) user;
-
+                    foundUser = (user instanceof User)? (User) user : (Admin) user;
                     break;
                 }
             }
@@ -90,7 +84,7 @@ public class ModeMateApp {
         String password = scanner.nextLine();
         System.out.println("Enter your name: ");
         String name = scanner.nextLine();
-        User user = new User(users.size(), name, email, password);
+        User user = new User(name, email, password);
         users.add(user);
         System.out.println("Registration successful ✅");
         System.out.println("Welcome to MoodMate " + user.getName());
@@ -180,7 +174,7 @@ public class ModeMateApp {
         }
     }
     private static void logOut(){
-
+        DataManager.saveUsers(users);
         currentUser = null;
     }
     private static void viewProgress(User user){
@@ -233,7 +227,6 @@ public class ModeMateApp {
                     case 1: login(); break;
                     case 2: register(); break;
                     case 3:
-                        DataManager.saveUsers(users);
                         System.exit(0); break;
                     default:
                         System.out.println("Wrong choice");
@@ -293,6 +286,27 @@ public class ModeMateApp {
         }
     }
 
+    private static void makeAdmin() {
+        System.out.println("Please enter a Email ID you want to make ADMIN:");
+        String email = scanner.nextLine();
+        for(int i=0;i< users.size();i++) {
+            if(email.equals(users.get(i).getEmail())) {
+                if(users.get(i) instanceof Admin) {
+                    System.out.println(users.get(i).getName()+" Already an Admin");
+                    return;
+                }
+                else {
+                    Person user = users.get(i);
+                    Admin admin = new Admin(user.getName(), user.getEmail(), user.getPassword());
+                    users.set(i, admin);
+                    System.out.println(admin.getName() + " Promted as Admin ⬆️");
+                    return;
+                }
+            }
+        }
+        System.out.println("Bhai Mila nhi Email !!");
+    }
+
     private static void addNewQuote() {
         System.out.println("Please enter the text of the new quote: ");
         String text = scanner.nextLine();
@@ -306,7 +320,7 @@ public class ModeMateApp {
              java.io.PrintWriter out = new java.io.PrintWriter(bw)) {
 
             // Format the line exactly as it is in your file
-            out.println("\"" + text + "\":" + category);
+            out.println("\n\"" + text + "\":" + category);
 
             System.out.println("✅ New quote added successfully!");
 
