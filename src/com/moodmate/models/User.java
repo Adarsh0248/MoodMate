@@ -10,8 +10,8 @@ import java.util.Scanner;
 public class User extends Person implements Serializable {
     private List<Habit> habits;
     private List<MoodLog> moodLogs;
-    public User(String name, String email, String password){
-        super(name,email,password);
+    public User(int id,String name, String email, String password){
+        super(id,name,email,password);
         habits = new ArrayList<>();
         moodLogs = new ArrayList<>();
     }

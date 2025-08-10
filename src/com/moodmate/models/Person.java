@@ -7,14 +7,14 @@ public abstract class Person implements Serializable {
     protected String name;
     protected String email;
     protected String password;
-    private static int totalUsers = 0;
+
 
     protected Person() {
         // Required for deserialization of subclasses
     }
 
-    public Person( String name, String email, String password) {
-        this.id = ++totalUsers;
+    public Person( int id ,String name, String email, String password) {
+        this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
