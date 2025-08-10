@@ -27,8 +27,8 @@ public class DataManager{
             users=(List<Person>) ois.readObject();
         }
         catch( EOFException E){
-                Admin defaultAdmin1 = new Admin("Aman","aman@gmail.com","Aman@123");
-                Admin defaultAdmin2 = new Admin("Adarsh","adarsh@gmail.com","Adarsh@123");
+                Admin defaultAdmin1 = new Admin(1,"Aman","aman@gmail.com","Aman@123");
+                Admin defaultAdmin2 = new Admin(2,"Adarsh","adarsh@gmail.com","Adarsh@123");
                 users= new ArrayList<>();
                 users.add(defaultAdmin1);
                 users.add(defaultAdmin2);

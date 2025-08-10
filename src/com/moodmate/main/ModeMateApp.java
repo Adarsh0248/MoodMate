@@ -84,7 +84,7 @@ public class ModeMateApp {
         String password = scanner.nextLine();
         System.out.println("Enter your name: ");
         String name = scanner.nextLine();
-        User user = new User(name, email, password);
+        User user = new User(users.size()+1,name, email, password);
         users.add(user);
         System.out.println("Registration successful ✅");
         System.out.println("Welcome to MoodMate " + user.getName());
@@ -246,7 +246,6 @@ public class ModeMateApp {
                         case 3: viewAllUsers(); break;
                         case 4:makeAdmin(); break;
                         case 5 :
-                            admin = null;
                             logOut(); break;
                             default:
                                 System.out.println("Wrong choice");
@@ -287,26 +286,48 @@ public class ModeMateApp {
     }
 
     private static void makeAdmin() {
-        System.out.println("Please enter a Email ID you want to make ADMIN:");
-        String email = scanner.nextLine();
-        for(int i=0;i< users.size();i++) {
-            if(email.equals(users.get(i).getEmail())) {
-                if(users.get(i) instanceof Admin) {
-                    System.out.println(users.get(i).getName()+" Already an Admin");
-                    return;
-                }
-                else {
-                    Person user = users.get(i);
-                    Admin admin = new Admin(user.getName(), user.getEmail(), user.getPassword());
-                    users.set(i, admin);
-                    System.out.println(admin.getName() + " Promted as Admin ⬆️");
-                    return;
-                }
+        System.out.println("\nEnter the email of the user you wish to promote to Admin:");
+        String emailToPromote = scanner.nextLine();
+
+
+        Person personToPromote = null;
+        int userIndex = -1;
+
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getEmail().equalsIgnoreCase(emailToPromote)) {
+                personToPromote = users.get(i);
+                userIndex = i;
+                break;
             }
         }
-        System.out.println("Bhai Mila nhi Email !!");
-    }
 
+
+
+        if (personToPromote == null) {
+            System.out.println("❌ Error: No user found with that email.");
+            return;
+        }
+
+
+        if (personToPromote instanceof Admin) {
+            System.out.println("❌ Error: This person is already an Admin.");
+            return;
+        }
+
+
+
+
+        Admin newAdmin = new Admin(
+                personToPromote.getId(),
+                personToPromote.getName(),
+                personToPromote.getEmail(),
+                personToPromote.getPassword()
+        );
+
+        users.set(userIndex, newAdmin);
+
+        System.out.println("✅ Success! " + newAdmin.getName() + " has been promoted to an Admin.");
+    }
     private static void addNewQuote() {
         System.out.println("Please enter the text of the new quote: ");
         String text = scanner.nextLine();
