@@ -3,7 +3,7 @@ package com.moodmate.models;
 import java.io.Serializable;
 
 public abstract class Person implements Serializable {
-    protected int id;
+    private static final long serialVersionUID = 1L;    protected int id;
     protected String name;
     protected String email;
     protected String password;

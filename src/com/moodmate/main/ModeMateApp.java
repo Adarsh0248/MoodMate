@@ -308,7 +308,6 @@ public class ModeMateApp {
             return;
         }
 
-
         if (personToPromote instanceof Admin) {
             System.out.println("❌ Error: This person is already an Admin.");
             return;
