@@ -27,15 +27,15 @@ public class DataManager{
             users=(List<Person>) ois.readObject();
         }
         catch( EOFException E){
-                Admin defaultAdmin1 = new Admin(1,"Aman","aman@gmail.com","Aman@123");
-                Admin defaultAdmin2 = new Admin(2,"Adarsh","adarsh@gmail.com","Adarsh@123");
-                users= new ArrayList<>();
-                users.add(defaultAdmin1);
-                users.add(defaultAdmin2);
+            return new ArrayList<>();
         }
         catch (FileNotFoundException e){
-            System.out.println("No existing user data found. Starting fresh.");
-            return new ArrayList<>();
+            Admin defaultAdmin1 = new Admin(1,"Aman","aman@gmail.com","Aman@123");
+            Admin defaultAdmin2 = new Admin(2,"Adarsh","adarsh@gmail.com","Adarsh@123");
+            users= new ArrayList<>();
+            users.add(defaultAdmin1);
+            users.add(defaultAdmin2);
+            return users;
         }
         catch(IOException | ClassNotFoundException e){
             System.err.println("Error loading user data: " + e);
