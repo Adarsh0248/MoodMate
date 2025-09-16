@@ -27,14 +27,23 @@ public class DataManager{
             users=(List<Person>) ois.readObject();
         }
         catch( EOFException E){
-            return new ArrayList<>();
+            Admin defaultAdmin1 = new Admin(1,"Aman","aman@gmail.com","Aman@123");
+            Admin defaultAdmin2 = new Admin(2,"Adarsh","adarsh@gmail.com","Adarsh@123");
+            Admin defaultAdmin3 = new Admin(3,"Admin","admin@moodmate.com","admin123");
+            users= new ArrayList<>();
+            users.add(defaultAdmin1);
+            users.add(defaultAdmin2);
+            users.add(defaultAdmin3);
+            return users;
         }
         catch (FileNotFoundException e){
             Admin defaultAdmin1 = new Admin(1,"Aman","aman@gmail.com","Aman@123");
             Admin defaultAdmin2 = new Admin(2,"Adarsh","adarsh@gmail.com","Adarsh@123");
+            Admin defaultAdmin3 = new Admin(3,"Admin","admin@moodmate.com","admin123");
             users= new ArrayList<>();
             users.add(defaultAdmin1);
             users.add(defaultAdmin2);
+            users.add(defaultAdmin3);
             return users;
         }
         catch(IOException | ClassNotFoundException e){

@@ -210,6 +210,7 @@ public class ModeMateApp {
     public static void main(String[] args) {
         scanner = new Scanner(System.in);
         users = DataManager.loadUsers();
+        DataManager.saveUsers(users);
         quoteManager= new QuoteManager();
         quoteManager.loadQuotesFromFile();
         while (true) {
