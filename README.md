@@ -1,3 +1,4 @@
+
 # 🧠 Welcome to MoodMate!
 
 Hey there! Welcome to MoodMate, a little Java app we built to help people (like us!) get better at building habits, keeping an eye on their mood, and getting a bit of smart, personalized feedback along the way. We designed this whole thing with a big focus on solid Object-Oriented Programming (OOP) principles.
